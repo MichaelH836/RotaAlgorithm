@@ -4,38 +4,27 @@ import java.util.ArrayList;
 
 public class RotaAlgorithm {
 
-	
-	static int[][] finalRota = new int[][] { { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } };
+	static Person[][] finalRota = new Person[][] { { null, null, null, null, null, null, null },
+			{ null, null, null, null, null, null, null } };
 
 	public static void main(String[] args) {
-		ArrayList<int[][]> list = new ArrayList<>();
-		int[][] mike = new int[][] { { 1, 1, 0, 0, 0, 1, 1 }, { 0, 0, 0, 0, 0, 0, 0 } };
-		list.add(mike);
-		int[][] aine = new int[][] { { 0, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0 } };
-		list.add(aine);
-		int[][] michMc = new int[][] { { 1, 1, 0, 1, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } };
-		list.add(michMc);
-		int[][] brenda = new int[][] { { 0, 0, 1, 1, 0, 1, 1 }, { 0, 1, 1, 0, 1, 1, 0 } };
-		list.add(brenda);
-		int[][] michH = new int[][] { { 1, 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } };
-		list.add(michH);
-		int[][] roisin = new int[][] { { 0, 0, 0, 0, 0, 0, 0 }, { 1, 1, 1, 0, 1, 0, 1 } };
-		list.add(roisin);
-		int[][] john = new int[][] { { 0, 1, 0, 1, 1, 0, 0 }, { 1, 1, 1, 1, 1, 0, 1 } };
-		list.add(john);
-		int[][] meabh = new int[][] { { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 0 } };
-		list.add(meabh);
-		int[][] patrick = new int[][] { { 0, 0, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0 } };
-		list.add(patrick);
-		int[][] maura = new int[][] { { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 1, 0 } };
-		list.add(maura);
-		int[][] bronagh = new int[][] { { 0, 0, 0, 0, 1, 0, 0 }, { 0, 0, 1, 0, 1, 0, 1 } };
-		list.add(bronagh);
+		ArrayList<Person> list = new ArrayList<>();
+		list.add(new Person("Mike", new int[][] { { 1, 1, 0, 0, 0, 1, 1 }, { 0, 0, 0, 0, 0, 0, 0 } }));
+		list.add(new Person("Aine", new int[][] { { 0, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0 } }));
+		list.add(new Person("Michael Mc", new int[][] { { 1, 1, 0, 1, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } }));
+		list.add(new Person("Brenda", new int[][] { { 0, 0, 1, 1, 0, 1, 1 }, { 0, 1, 1, 0, 1, 1, 0 } }));
+		list.add(new Person("Michael H", new int[][] { { 1, 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } }));
+		list.add(new Person("Roisin", new int[][] { { 0, 0, 0, 0, 0, 0, 0 }, { 1, 1, 1, 0, 1, 0, 1 } }));
+		list.add(new Person("John", new int[][] { { 0, 1, 0, 1, 1, 0, 0 }, { 1, 1, 1, 1, 1, 0, 1 } }));
+		list.add(new Person("Meabh", new int[][] { { 0, 0, 0, 0, 0, 0, 1 }, { 0, 1, 0, 0, 0, 0, 0 } }));
+		list.add(new Person("Patrick", new int[][] { { 0, 0, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0 } }));
+		list.add(new Person("Maura", new int[][] { { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 1, 0 } }));
+		list.add(new Person("Bronagh", new int[][] { { 0, 0, 0, 0, 1, 0, 0 }, { 0, 0, 1, 0, 1, 0, 1 } }));
 
 		ArrayList<Integer> days = new ArrayList<>();
 		ArrayList<Integer> nights = new ArrayList<>();
 		int[] totals = new int[list.size()];
-		ArrayList<Integer> onlyDayList = new ArrayList<>();
+		ArrayList<Person> onlyDayList = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {
 			boolean doesNights = false;
 			totals[i] = totalList(totals);
@@ -44,62 +33,82 @@ public class RotaAlgorithm {
 					days.add(0);
 					nights.add(0);
 				}
-				if (list.get(i)[1][j] != 0 && doesNights == false) {
-					doesNights = true;
-				}
-				if (list.get(i)[0][j] == 1)
+				if (list.get(i).getDays()[j] == 1)
 					days.set(j, days.get(j) + 1);
-				if (list.get(i)[1][j] == 1)
+				if (list.get(i).getNights()[j] == 1)
 					nights.set(j, nights.get(j) + 1);
 			}
-			if (!doesNights) {
-				onlyDayList.add(i);
-			}
+			if (!list.get(i).doesNights())
+				onlyDayList.add(list.get(i));
 		}
 		boolean loop = true;
-		if (days.contains(0)) System.exit(0);;
+		if (days.contains(0))
+			System.exit(0);
 		System.out.println(days);
 		System.out.println(nights);
-		int[][] currentRota = new int[][] { { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } };
+		Person[][] currentRota = new Person[][] { { null, null, null, null, null, null, null },
+				{ null, null, null, null, null, null, null } };
 		while (true) {
 			int minDay = minList(days);
-			if (minDay == -1) break;
 			System.out.println(minDay);
-			int minNight = minList(nights);
-			boolean assigned = false;
+			System.out.println(onlyDayList.isEmpty());
+			if (minDay == -1)
+				break;
+			int assigned = -1;
 			if (!onlyDayList.isEmpty()) {
 				for (int i = 0; i < onlyDayList.size(); i++) {
-					if (list.get(onlyDayList.get(i))[0][minDay] == 1) {
-						System.out.println("miguel");
-						currentRota[0][minDay] = onlyDayList.get(i);
-						assigned = true;
+					Person p = onlyDayList.get(i);
+					if (p.getDays()[minDay] == 1 && !p.isMax()) {
+						assigned = p.getId();
+						currentRota[0][minDay] = p;
+						p.addTime();
 						days.set(minDay, -1);
 						onlyDayList.remove(i);
-						System.out.println(onlyDayList);
 						break;
 					}
 				}
-				if (!assigned) {
+				if (assigned == -1) {
 					for (int i = 0; i < list.size(); i++) {
-						if (list.get(i)[0][minDay] == 1) {
-							currentRota[0][minDay] = i;
+						if (list.get(i).getDays()[minDay] == 1 && !list.get(i).isMax()) {
+							currentRota[0][minDay] = list.get(i);
+							list.get(i).addTime();
 							days.set(minDay, -1);
 							break;
 						}
 					}
 				}
 			} else {
+				Person minPerson = null;
+				int minTimes = -1;
 				for (int i = 0; i < list.size(); i++) {
-					if (list.get(i)[0][minDay] == 1) {
-						currentRota[0][minDay] = onlyDayList.get(i);
-						break;
+					Person p = list.get(i);
+					if (p.getDays()[minDay] == 1 && !p.isMax()) {
+						if (p.getTimesOn() < minTimes || minTimes == -1) {
+							minTimes = p.getTimesOn();
+							minPerson = p;
+						}
 					}
+				}
+				if (minPerson != null) {
+					currentRota[0][minDay] = minPerson;
+					days.set(minDay, -1);
+				}
+			}
+		}
+		for (int i = 0; i < 7; i++) {
+			int minNight = minList(nights);
+			int assigned = -1;
+			System.out.println(minNight);
+			for (int j = 0; j < list.size(); j++) {
+				if (list.get(j).getNights()[minNight] == 1) {
+					System.out.println(list.get(j).getName());
+					currentRota[1][minNight] = list.get(j);
+					break;
 				}
 			}
 		}
 		finalRota = currentRota;
 		printList(finalRota);
-		
 	}
 
 	private static int minList(ArrayList<Integer> list) {
@@ -123,11 +132,15 @@ public class RotaAlgorithm {
 			total += list[i];
 		return total;
 	}
-	
-	private static void printList(int[][] list) {
+
+	private static void printList(Person[][] list) {
 		for (int i = 0; i < 2; i++) {
 			String word = "";
-			for (int num : list[i]) word += (num + ", ");
+			for (Person per : list[i])
+				if (per == null)
+					word += "null, ";
+				else
+					word += (per.getName() + ", ");
 			System.out.println(word);
 		}
 	}
