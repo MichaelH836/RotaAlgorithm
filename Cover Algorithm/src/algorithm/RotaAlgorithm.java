@@ -16,7 +16,7 @@ public class RotaAlgorithm {
 		list.add(new Person("Michael H", new int[][] { { 1, 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } }));
 		list.add(new Person("Roisin", new int[][] { { 0, 0, 0, 0, 0, 0, 0 }, { 1, 1, 1, 0, 1, 0, 1 } }));
 		list.add(new Person("John", new int[][] { { 0, 1, 0, 1, 1, 0, 0 }, { 1, 1, 1, 1, 1, 0, 1 } }));
-		list.add(new Person("Meabh", new int[][] { { 0, 0, 0, 0, 0, 0, 1 }, { 0, 1, 0, 0, 0, 0, 0 } }));
+		list.add(new Person("Meabh", new int[][] { { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 0 } }));
 		list.add(new Person("Patrick", new int[][] { { 0, 0, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0 } }));
 		list.add(new Person("Maura", new int[][] { { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 1, 0 } }));
 		list.add(new Person("Bronagh", new int[][] { { 0, 0, 0, 0, 1, 0, 0 }, { 0, 0, 1, 0, 1, 0, 1 } }));
@@ -69,9 +69,10 @@ public class RotaAlgorithm {
 				}
 				if (assigned == -1) {
 					for (int i = 0; i < list.size(); i++) {
-						if (list.get(i).getDays()[minDay] == 1 && !list.get(i).isMax()) {
-							currentRota[0][minDay] = list.get(i);
-							list.get(i).addTime();
+						Person p = list.get(i);
+						if (p.getDays()[minDay] == 1 && !p.isMax()) {
+							currentRota[0][minDay] = p;
+							p.addTime();
 							days.set(minDay, -1);
 							break;
 						}
@@ -97,14 +98,24 @@ public class RotaAlgorithm {
 		}
 		for (int i = 0; i < 7; i++) {
 			int minNight = minList(nights);
+			int minTimes = -1;
+			Person minPerson = null;
 			int assigned = -1;
 			System.out.println(minNight);
 			for (int j = 0; j < list.size(); j++) {
-				if (list.get(j).getNights()[minNight] == 1) {
-					System.out.println(list.get(j).getName());
-					currentRota[1][minNight] = list.get(j);
-					break;
+				Person p = list.get(j);
+				if (p.getNights()[minNight] == 1 && !p.isMax()) {
+					System.out.println(p.getName());
+					if (p.getTimesOn() < minTimes || minTimes == -1) {
+						minTimes = p.getTimesOn();
+						minPerson = p;
+					}
 				}
+			}
+			if (minPerson != null) {
+				currentRota[1][minNight] = minPerson;
+				minPerson.addTime();
+				nights.set(minNight, -1);
 			}
 		}
 		finalRota = currentRota;

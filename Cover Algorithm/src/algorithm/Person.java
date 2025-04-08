@@ -24,16 +24,15 @@ public class Person {
 			}
 	}
 	
-	public Person(String name, int[][] availability, int maxDays) {
+	public Person(String name, int[][] availability, int maxTimes) {
 		this.name = name;
 		this.availability = availability;
 		this.id = nextId;
 		this.nextId++;
-		
+		this.max = maxTimes;
 		for (int i : this.availability[1])
 			if (i == 1) {
 				this.doesNights = true;
-				max = 2;
 			}
 	}
 	
