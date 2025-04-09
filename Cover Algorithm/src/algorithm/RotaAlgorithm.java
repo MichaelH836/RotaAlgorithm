@@ -16,10 +16,15 @@ public class RotaAlgorithm {
 		list.add(new Person("Michael H", new int[][] { { 1, 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } }));
 		list.add(new Person("Roisin", new int[][] { { 0, 0, 0, 0, 0, 0, 0 }, { 1, 1, 1, 0, 1, 0, 1 } }));
 		list.add(new Person("John", new int[][] { { 0, 1, 0, 1, 1, 0, 0 }, { 1, 1, 1, 1, 1, 0, 1 } }));
-		list.add(new Person("Meabh", new int[][] { { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 0 } }));
+		list.add(new Person("Meabh", new int[][] { { 0, 0, 0, 0, 1, 0, 1 }, { 0, 0, 0, 0, 0, 0, 0 } }));
 		list.add(new Person("Patrick", new int[][] { { 0, 0, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0 } }));
-		list.add(new Person("Maura", new int[][] { { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 1, 0 } }));
+		list.add(new Person("Maura", new int[][] { { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 1, 0 } },
+				new int[][] { { 6 }, { 5 } }));
 		list.add(new Person("Bronagh", new int[][] { { 0, 0, 0, 0, 1, 0, 0 }, { 0, 0, 1, 0, 1, 0, 1 } }));
+
+		boolean[][] dayPreferences = new boolean[][] { { false, false, false, false, false, false, false },
+				{ false, false, false, false, false, false, false } };
+		ArrayList<Person> hasPreferredDays = new ArrayList<>();
 
 		ArrayList<Integer> days = new ArrayList<>();
 		ArrayList<Integer> nights = new ArrayList<>();
@@ -28,6 +33,15 @@ public class RotaAlgorithm {
 		for (int i = 0; i < list.size(); i++) {
 			boolean doesNights = false;
 			totals[i] = totalList(totals);
+			int[][] prefDays = list.get(i).getPreferredDays();
+			if (prefDays != null && prefDays.length != 0) {
+				for (int k = 0; k < prefDays.length; k++) {
+					for (int j = 0; j < prefDays[k].length; j++) {
+						dayPreferences[k][prefDays[k][j]] = true;
+						hasPreferredDays.add(list.get(i));
+					}
+				}
+			}
 			for (int j = 0; j < 7; j++) {
 				if (i == 0) {
 					days.add(0);
@@ -41,21 +55,31 @@ public class RotaAlgorithm {
 			if (!list.get(i).doesNights())
 				onlyDayList.add(list.get(i));
 		}
+		System.out.println(dayPreferences[0][5]);
 		boolean loop = true;
 		if (days.contains(0))
 			System.exit(0);
-		System.out.println(days);
-		System.out.println(nights);
+		/*
+		 * System.out.println(days); System.out.println(nights);
+		 */
 		Person[][] currentRota = new Person[][] { { null, null, null, null, null, null, null },
 				{ null, null, null, null, null, null, null } };
 		while (true) {
 			int minDay = minList(days);
-			System.out.println(minDay);
-			System.out.println(onlyDayList.isEmpty());
 			if (minDay == -1)
 				break;
 			int assigned = -1;
-			if (!onlyDayList.isEmpty()) {
+			if (dayPreferences[0][minDay]) {
+				for (Person p : hasPreferredDays) {
+					if (p.getDays()[minDay] == 1 && !p.isMax()) {
+						assigned = p.getId();
+						currentRota[0][minDay] = p;
+						p.addTime();
+						days.set(minDay, -1);
+						break;
+					}
+				}
+			} else if (!onlyDayList.isEmpty()) {
 				for (int i = 0; i < onlyDayList.size(); i++) {
 					Person p = onlyDayList.get(i);
 					if (p.getDays()[minDay] == 1 && !p.isMax()) {
@@ -99,23 +123,36 @@ public class RotaAlgorithm {
 		for (int i = 0; i < 7; i++) {
 			int minNight = minList(nights);
 			int minTimes = -1;
+			System.out.println(minNight);
 			Person minPerson = null;
 			int assigned = -1;
-			System.out.println(minNight);
-			for (int j = 0; j < list.size(); j++) {
-				Person p = list.get(j);
-				if (p.getNights()[minNight] == 1 && !p.isMax()) {
-					System.out.println(p.getName());
-					if (p.getTimesOn() < minTimes || minTimes == -1) {
-						minTimes = p.getTimesOn();
-						minPerson = p;
+			if (dayPreferences[1][minNight]) {
+				System.out.println("blabla");
+				for (Person p : hasPreferredDays) {
+					if (p.getNights()[minNight] == 1 && !p.isMax()) {
+						assigned = p.getId();
+						currentRota[1][minNight] = p;
+						p.addTime();
+						nights.set(minNight, -1);
+						break;
 					}
 				}
-			}
-			if (minPerson != null) {
-				currentRota[1][minNight] = minPerson;
-				minPerson.addTime();
-				nights.set(minNight, -1);
+			} else {
+				for (int j = 0; j < list.size(); j++) {
+					Person p = list.get(j);
+					if (p.getNights()[minNight] == 1 && !p.isMax()) {
+						if (p.getTimesOn() < minTimes || minTimes == -1) {
+							minTimes = p.getTimesOn();
+							minPerson = p;
+						}
+					}
+				}
+				if (minPerson != null) {
+					currentRota[1][minNight] = minPerson;
+					minPerson.addTime();
+					nights.set(minNight, -1);
+				}
+				
 			}
 		}
 		finalRota = currentRota;
