@@ -73,12 +73,15 @@ public class Main {
 	}
 
 	public void availabilityLoop(int shifts) {
-		this.noOfShifts = shifts;
 		panels[1].removeAll();
+		noOfShifts = shifts;
 
 		int[] dayAvailability = new int[noOfDays];
 		int[] nightAvailability = new int[noOfDays];
-		
+
+		int[] dayPreferences = new int[noOfDays];
+		int[] nightPreferences = new int[noOfDays];
+
 		String[] dayNames = new String[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
 		String[] timeType = new String[] { "Day", "Night" };
 		JButton[][] buttons = new JButton[shifts][noOfDays];
@@ -100,54 +103,66 @@ public class Main {
 						if (button.getBackground().equals(new Color(255, 0, 0, 255))) {
 							button.setBackground(new Color(0, 255, 0, 255));
 							dayAvailability[Character.getNumericValue(button.getText().charAt(0)) - 1] = 1;
+						} else if (button.getBackground().equals(new Color(0, 255, 0, 255))) {
+							button.setBackground(new Color(0, 0, 255, 255));
+							dayPreferences[Character.getNumericValue(button.getText().charAt(0)) - 1] = 1;
 						} else {
 							button.setBackground(new Color(255, 0, 0, 255));
 							dayAvailability[Character.getNumericValue(button.getText().charAt(0)) - 1] = 0;
-							
+							dayPreferences[Character.getNumericValue(button.getText().charAt(0)) - 1] = 0;
 						}
-						
+
 					});
-				}
-				else {
+				} else {
 					button.addActionListener(e -> {
 						if (button.getBackground().equals(new Color(255, 0, 0, 255))) {
 							button.setBackground(new Color(0, 255, 0, 255));
 							nightAvailability[Character.getNumericValue(button.getText().charAt(0)) - 1] = 1;
+						} else if (button.getBackground().equals(new Color(0, 255, 0, 255))) {
+							button.setBackground(new Color(0, 0, 255, 255));
+							nightPreferences[Character.getNumericValue(button.getText().charAt(0)) - 1] = 1;
 						} else {
 							button.setBackground(new Color(255, 0, 0, 255));
 							nightAvailability[Character.getNumericValue(button.getText().charAt(0)) - 1] = 0;
+							nightPreferences[Character.getNumericValue(button.getText().charAt(0)) - 1] = 0;
 						}
 					});
 				}
 			}
-			
 		}
 		int[][] availability = new int[][] { dayAvailability, nightAvailability };
+		int[][] preferences = new int[][] { dayPreferences, nightPreferences };
 		JButton submitButton = new JButton("Add");
 		submitButton.setBounds(300, 280, 100, 30);
 		JButton doneButton = new JButton("Finish");
 		doneButton.setBounds(400, 280, 100, 30);
-		
+
 		submitButton.addActionListener(e -> {
-			people.add(new Person(name.getText(), availability));
+			people.add(new Person(name.getText(), availability, preferences));
 			availabilityLoop(shifts);
 		});
-		doneButton.addActionListener(e -> {
-			showRota();
-		});
-		
+		doneButton.addActionListener(e -> showRota());
+
 		panels[1].add(submitButton);
 		panels[1].add(doneButton);
 		panels[1].repaint();
 	}
-	
-	private void showRota() {
-		RotaAlgorithm rota = new RotaAlgorithm(people, noOfDays);
+
+	public void showRota() {
+		panels[1].removeAll();
+		RotaAlgorithm rota = new RotaAlgorithm(people, noOfDays, noOfShifts);
+		Person[][] finalRota = rota.getFinalRota();
+		for (int i = 0; i < finalRota.length; i++) {
+			for (int j = 0; j < finalRota[i].length; j++) {
+				JLabel label = new JLabel(finalRota[i][j].getName());
+				label.setBounds(100 + (j * 75), 100 + (i * 100), 100, 50);
+				panels[1].add(label);
+			}
+		}
+		panels[1].repaint();
 	}
 
 	public static void main(String[] args) {
 		Main m = new Main();
-		// RotaAlgorithm a = new RotaAlgorithm(7, 7);
 	}
-
 }
