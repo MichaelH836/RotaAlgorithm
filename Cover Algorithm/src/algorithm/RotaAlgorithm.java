@@ -1,29 +1,18 @@
 package algorithm;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class RotaAlgorithm {
 
-	static Person[][] finalRota = new Person[][] { { null, null, null, null, null, null, null },
+	private Person[][] finalRota = new Person[][] { { null, null, null, null, null, null, null },
 			{ null, null, null, null, null, null, null } };
+	
+	public RotaAlgorithm(ArrayList<Person> employees, int noOfDays) {
+		ArrayList<Person> list = employees;
+		Scanner scanner = new Scanner(System.in);
 
-	public static void main(String[] args) {
-		ArrayList<Person> list = new ArrayList<>();
-		list.add(new Person("Mike", new int[][] { { 1, 1, 0, 0, 0, 1, 1 }, { 0, 0, 0, 0, 0, 0, 0 } }));
-		list.add(new Person("Aine", new int[][] { { 0, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0 } }));
-		list.add(new Person("Michael Mc", new int[][] { { 1, 1, 0, 1, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } }));
-		list.add(new Person("Brenda", new int[][] { { 0, 0, 1, 1, 0, 1, 1 }, { 0, 1, 1, 0, 1, 1, 0 } }));
-		list.add(new Person("Michael H", new int[][] { { 1, 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 } }));
-		list.add(new Person("Roisin", new int[][] { { 0, 0, 0, 0, 0, 0, 0 }, { 1, 1, 1, 0, 1, 0, 1 } }));
-		list.add(new Person("John", new int[][] { { 0, 1, 0, 1, 1, 0, 0 }, { 1, 1, 1, 1, 1, 0, 1 } }));
-		list.add(new Person("Meabh", new int[][] { { 0, 0, 0, 0, 1, 0, 1 }, { 0, 0, 0, 0, 0, 0, 0 } }));
-		list.add(new Person("Patrick", new int[][] { { 0, 0, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0 } }));
-		list.add(new Person("Maura", new int[][] { { 0, 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 1, 0 } },
-				new int[][] { { 6 }, { 5 } }));
-		list.add(new Person("Bronagh", new int[][] { { 0, 0, 0, 0, 1, 0, 0 }, { 0, 0, 1, 0, 1, 0, 1 } }));
-
-		boolean[][] dayPreferences = new boolean[][] { { false, false, false, false, false, false, false },
-				{ false, false, false, false, false, false, false } };
+		boolean[][] dayPreferences = new boolean[2][noOfDays];
 		ArrayList<Person> hasPreferredDays = new ArrayList<>();
 
 		ArrayList<Integer> days = new ArrayList<>();
@@ -42,7 +31,7 @@ public class RotaAlgorithm {
 					}
 				}
 			}
-			for (int j = 0; j < 7; j++) {
+			for (int j = 0; j < noOfDays; j++) {
 				if (i == 0) {
 					days.add(0);
 					nights.add(0);
@@ -55,15 +44,10 @@ public class RotaAlgorithm {
 			if (!list.get(i).doesNights())
 				onlyDayList.add(list.get(i));
 		}
-		System.out.println(dayPreferences[0][5]);
 		boolean loop = true;
 		if (days.contains(0))
 			System.exit(0);
-		/*
-		 * System.out.println(days); System.out.println(nights);
-		 */
-		Person[][] currentRota = new Person[][] { { null, null, null, null, null, null, null },
-				{ null, null, null, null, null, null, null } };
+		Person[][] currentRota = new Person[2][noOfDays];
 		while (true) {
 			int minDay = minList(days);
 			if (minDay == -1)
@@ -120,14 +104,12 @@ public class RotaAlgorithm {
 				}
 			}
 		}
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < noOfDays; i++) {
 			int minNight = minList(nights);
 			int minTimes = -1;
-			System.out.println(minNight);
 			Person minPerson = null;
 			int assigned = -1;
 			if (dayPreferences[1][minNight]) {
-				System.out.println("blabla");
 				for (Person p : hasPreferredDays) {
 					if (p.getNights()[minNight] == 1 && !p.isMax()) {
 						assigned = p.getId();

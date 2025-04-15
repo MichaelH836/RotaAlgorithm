@@ -18,11 +18,13 @@ public class Person {
 		this.id = nextId;
 		this.nextId++;
 		this.preferredDays = preferredTimes;
-		for (int i : this.availability[1])
-			if (i == 1) {
-				this.doesNights = true;
-				max = 2;
-			}
+		if (this.availability.length > 1) {
+			for (int i : this.availability[1])
+				if (i == 1) {
+					this.doesNights = true;
+					max = 2;
+				}
+		}
 	}
 
 	public Person(String name, int[][] availability, int maxTimes, int[][] preferredTimes) {
@@ -32,10 +34,13 @@ public class Person {
 		this.nextId++;
 		this.max = maxTimes;
 		this.preferredDays = preferredTimes;
-		for (int i : this.availability[1])
-			if (i == 1) {
-				this.doesNights = true;
-			}
+		if (this.availability.length > 1) {
+			for (int i : this.availability[1])
+				if (i == 1) {
+					this.doesNights = true;
+					max = 2;
+				}
+		}
 	}
 	
 	public Person(String name, int[][] availability) {
@@ -44,11 +49,13 @@ public class Person {
 		this.id = nextId;
 		this.nextId++;
 		this.preferredDays = null;
-		for (int i : this.availability[1])
-			if (i == 1) {
-				this.doesNights = true;
-				max = 2;
-			}
+		if (this.availability.length > 1) {
+			for (int i : this.availability[1])
+				if (i == 1) {
+					this.doesNights = true;
+					max = 2;
+				}
+		}
 	}
 
 	public Person(String name, int[][] availability, int maxTimes) {
@@ -58,10 +65,13 @@ public class Person {
 		this.nextId++;
 		this.max = maxTimes;
 		this.preferredDays = null;
-		for (int i : this.availability[1])
-			if (i == 1) {
-				this.doesNights = true;
-			}
+		if (this.availability.length > 1) {
+			for (int i : this.availability[1])
+				if (i == 1) {
+					this.doesNights = true;
+					max = 2;
+				}
+		}
 	}
 	
 	public int[][] getPreferredDays() {
