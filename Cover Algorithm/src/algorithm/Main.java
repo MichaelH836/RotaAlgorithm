@@ -33,8 +33,8 @@ public class Main {
 
 		JPanel text = new JPanel();
 		text.setLayout(null);
-		text.setBounds(200, 10, 600, 100);
-		text.setBackground(new Color(255, 255, 3, 255));
+		text.setBounds(0, 0, 1000, 120);
+		text.setBackground(Color.LIGHT_GRAY);
 		JPanel buttons = new JPanel();
 		buttons.setLayout(null);
 		buttons.setBounds(100, 150, 800, 320);
@@ -54,9 +54,9 @@ public class Main {
 
 	private void shiftsPerDay() {
 		JLabel label = new JLabel("How many shifts per day?");
-		label.setFont(new Font("Serif", Font.BOLD, 24));
-		label.setForeground(Color.BLACK);
-		label.setBounds(170, 20, 300, 50);
+		label.setFont(new Font("Arial Black", Font.BOLD, 30));
+		label.setForeground(new Color(0, 150, 255, 100));
+		label.setBounds(40, 30, 500, 50);
 		panels[0].add(label);
 
 		JButton button1 = new JButton("One Shift");

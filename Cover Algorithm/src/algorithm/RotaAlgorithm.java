@@ -24,13 +24,11 @@ public class RotaAlgorithm {
 			boolean doesNights = false;
 			totals[i] = totalList(totals);
 			int[][] prefDays = list.get(i).getPreferredDays();
-			if (prefDays != null && prefDays.length != 0) {
-				for (int k = 0; k < prefDays.length; k++) {
-					for (int j = 0; j < prefDays[k].length; j++) {
-						if (prefDays[k][j] == 1) {
-							dayPreferences[k][prefDays[k][j]] = 1;
-							hasPreferredDays.add(list.get(i));
-						}
+			for (int k = 0; k < prefDays.length; k++) {
+				for (int j = 0; j < prefDays[k].length; j++) {
+					if (prefDays[k][j] == 1) {
+						dayPreferences[k][j] = 1;
+						hasPreferredDays.add(list.get(i));
 					}
 				}
 			}
@@ -51,6 +49,7 @@ public class RotaAlgorithm {
 		if (days.contains(0))
 			System.exit(0);
 		Person[][] currentRota = new Person[noOfShifts][noOfDays];
+		
 		while (true) {
 			int minDay = minList(days);
 			if (minDay == -1)
