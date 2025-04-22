@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -23,22 +25,23 @@ public class Main {
 	private ArrayList<Person> people = new ArrayList<>();
 
 	public Main() {
+		
 		this.panels = new JPanel[2];
 		this.frame = new JFrame("RotaSorter");
-		frame.setSize(1000, 500);
+		frame.setSize(1920, 1080);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setPreferredSize(new Dimension(1000, 500));
+		layeredPane.setPreferredSize(new Dimension(1920, 1080));
+		
 
 		JPanel text = new JPanel();
 		text.setLayout(null);
-		text.setBounds(0, 0, 1000, 120);
+		text.setBounds(0, 0, 1920, 120);
 		text.setBackground(Color.LIGHT_GRAY);
 		JPanel buttons = new JPanel();
 		buttons.setLayout(null);
-		buttons.setBounds(100, 150, 800, 320);
-		buttons.setBackground(new Color(255, 255, 3, 255));
+		buttons.setBounds(225, 150, 800, 320);
 		panels[0] = text;
 		panels[1] = buttons;
 
@@ -95,6 +98,7 @@ public class Main {
 				buttons[i][j].setBounds(20 + (j * 110), 60 + (i * 110), 100, 100);
 				buttons[i][j].setBackground(new Color(255, 0, 0, 255));
 				buttons[i][j].setFont(new Font("Arial", Font.BOLD, 10));
+				buttons[i][j].setForeground(Color.WHITE);
 				panels[1].add(buttons[i][j]);
 			}
 			for (JButton button : buttons[i]) {
